@@ -2,9 +2,8 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 admin.initializeApp()
 
-exports.sendNotification = functions.firestore
-  .region('europe-west2')
-  .document('messages/{groupId1}/{groupId2}/{message}')
+exports.sendNotification = functions.region('europe-west2').firestore
+  .document('messages_talker/{groupId1}/{groupId2}/{message}')
   .onCreate((snap, context) => {
     console.log('----------------start function--------------------')
 
@@ -18,7 +17,7 @@ exports.sendNotification = functions.firestore
     // Get push token user to (receive)
     admin
       .firestore()
-      .collection('users')
+      .collection('users_talker')
       .where('id', '==', idTo)
       .get()
       .then(querySnapshot => {
@@ -28,7 +27,7 @@ exports.sendNotification = functions.firestore
             // Get info user from (sent)
             admin
               .firestore()
-              .collection('users')
+              .collection('users_talker')
               .where('id', '==', idFrom)
               .get()
               .then(querySnapshot2 => {
